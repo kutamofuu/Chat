@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChAkkat</title>
+    <style>
+        @charset "utf-8";
+
+         body {
+	        font-family: Corbel;
+        }
+
+        form {
+            background: black; 
+            padding: 0.25rem; 
+            position: fixed; 
+            bottom: 0; left: 0; right: 0; 
+            display: flex; 
+            height: 3rem; 
+            box-sizing: border-box; 
+            backdrop-filter: blur(10px);}
+
+        p {
+            min-width: 320px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-top: 15px;
+            padding-right: 20px;
+            padding-left: 20px;
+            padding-bottom: 15px;
+            box-shadow: 10px 10px 30px #3A3A3A;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="div-group"></div>
+    <form action="">
+        <input type="text" class="form-control" placeholder="Ingrese su texto aqui">
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io()
+        const form = document.querySelector('form')
+        const input = document.querySelector('input')
+        let mensajes = document.querySelector('div')
+
+        form.addEventListener('submit', (e) =>{
+            e.preventDefault()
+            if(input.value){
+                socket.emit('chat', input.value)
+                input.value = ''
+            }
+        })
+
+        socket.on('chat', (msg) => {
+            let item = document.createElement('p')
+            item.textContent = msg
+            mensajes.appendChild(item)
+            window.scrollto(0, document.body.scrollHeight)
+        })
+    </script>
+</body>
+</html>

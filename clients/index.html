@@ -8,62 +8,32 @@
     <style>
         @charset "utf-8";
 
-         body {
+        * {
 	        font-family: Corbel;
+            box-sizing: border-box;
+        }
+
+        .chat{
+            height: 800px;
+            width: 600px;
+            border-style: solid;
+            border-color: black;
+            position: fixed;
         }
 
         form {
-            background: grey; 
-            padding: 0.25rem; 
-            bottom: 0; left: 0; right: 0; 
-            display: flex; 
-            height: 3rem; 
-            box-sizing: border-box; 
-            margin-right: auto;
-            margin-left: auto;
-            width: 320px;
-            position: fixed;
-
+            
         }
-
-        p {
-            width: 320px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 10px;
-            padding-top: 15px;
-            padding-right: 20px;
-            padding-left: 20px;
-            padding-bottom: 15px;
-            box-shadow: 10px 10px 30px #3A3A3A;
-            border-radius: 12px;
-            overflow-wrap: break-word; 
-        }
-
-        .div-group {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            min-width: 320px;
-            max-width: 1200px;
-            height: 700px;
-            overflow: scroll;
-        }
-
-        .inputMessage{
-            margin-left: auto;
-            margin-right: auto;
-            width: 320px;
-        }
-
     </style>
 </head>
 <body>
-    <div class="div-group"></div>
-    <form action="">
-        <input type="text" class="inputMessage" placeholder="Escribe aqui">
-        <button type="submit" class="button">Send</button>
-    </form>
+    <div class="chat">
+        <div class="div-group"></div>
+        <form action="">
+            <input type="text" class="inputMessage" placeholder="Escribe aqui">
+            <button type="submit" class="button">Send</button>
+        </form>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         let socket = io()
@@ -80,8 +50,7 @@
         socket.on('chat', (msg) => {
             let item = document.createElement('p')
             item.textContent = msg
-            mensajes.appendChild(item)
-            mensajes.scrollTo(0, document.body.scrollHeight)
+            mensajes.prepend(item)
         })
     </script>
 </body>

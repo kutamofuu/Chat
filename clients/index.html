@@ -12,46 +12,81 @@
 	        font-family: Corbel;
             box-sizing: border-box;
         }
-
-        .chat{
-            height: 800px;
-            width: 600px;
-            border-style: solid;
-            border-color: black;
-            position: fixed;
+        body {
+            background-color: #C7C7C7;
+            margin: 0;
         }
-
         form {
-            
+            display: flex;
+            position: fixed;
+            justify-content: center;
+            width: 100%;
+            bottom: 10px;
+            z-index: 100;
+        }
+        .inputMessage {
+            width: 280px;
+            margin-right: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="chat">
-        <div class="div-group"></div>
-        <form action="">
-            <input type="text" class="inputMessage" placeholder="Escribe aqui">
-            <button type="submit" class="button">Send</button>
-        </form>
-    </div>
+
+    <nav>
+        <ul>
+            <li><a href="/contactame">Conctactame</a></li>
+            <li><a href="/rooms">Rooms</a></li>
+        </ul>
+    </nav>
+    <h2>Chat</h2>
+    <!--Creamos un contenedor donde colocar cada uno de los mensajes-->
+    <div class="div-group"></div> 
+    <!--Formulario por el cual crearemos los mensajes-->
+    <form action="">
+        <!--Input donde iran los mensajes-->
+        <input type="text" class="inputMessage" placeholder="Escribe aqui">
+        <!--Boton para enviar, tambien podemos utilizar el intro-->
+        <button type="submit" class="button">Send</button>
+    </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         let socket = io()
-        const form = document.querySelector('form')
-        const input = document.querySelector('input')
-        let mensajes = document.querySelector('div')
+      
+        const form = document.querySelector('form');
+        const input = document.querySelector('input');
+        let mensajes = document.querySelector('div');
+        let ultimosMensajes = []; // Nuevo array para almacenar los últimos 5 mensajes
+      
+        // Cuando se haga submit, se ejecutara la funcion 'e'
         form.addEventListener('submit', (e) =>{
-            e.preventDefault()
-            if(input.value){
-                socket.emit('chat', input.value)
-                input.value = ''
-            }
-        })
+          e.preventDefault()
+          if(input.value){
+            socket.emit('chat', input.value);
+            input.value = '';
+          }
+        });
+      
         socket.on('chat', (msg) => {
-            let item = document.createElement('p')
-            item.textContent = msg
-            mensajes.prepend(item)
-        })
-    </script>
+          const item = document.createElement('p');
+          item.textContent = msg;
+          mensajes.prepend(item);
+      
+          ultimosMensajes.push(msg); // Agregar el mensaje recibido al array de mensajes
+        });
+      
+        socket.on('connection', () => {
+            // Mostrar los últimos 5 mensajes
+            for (let i = 0; i < 5 && i < ultimosMensajes.length; i++) {
+                const item = document.createElement('p');
+                item.textContent = ultimosMensajes[i];
+                mensajes.prepend(item);
+            }
+        
+            // Eliminar el primer mensaje si hay más de 5 mensajes en el array
+            if (ultimosMensajes.length > 5) {
+                ultimosMensajes.shift();
+            }
+        });
+      </script>
 </body>
 </html>

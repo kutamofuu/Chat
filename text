@@ -1,0 +1,9 @@
+<!--
+Por hacer tenemos:
+    1. Crear una base de datos donde tengamos:
+        usuario: xxxx
+            Cada uno tendra una tabla donde se guarden las claves privadas que tengamos para conectarnos con 
+            los demas usuarios con los que hayamos aceptado la connexión
+        constraseña: xxxx 'para acceder a las claves'
+            
+-->
